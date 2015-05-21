@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorBackground">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="SignIn" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorBackground">@android:color/darker_gray</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SignInEmail">
+        <item name="android:colorBackground">@android:color/white</item>
+    </style>
+</resources>
