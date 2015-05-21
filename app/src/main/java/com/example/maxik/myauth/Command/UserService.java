@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.Path;
 
@@ -14,13 +15,9 @@ import retrofit.http.Path;
  */
 public interface UserService {
 
-    @GET("/users/{id}")
-    public User findUser(@Path("id") int id);
+    @GET("/user")
+    public void authenticate(@Header("Authorization") String authorization, Callback<User> callback);
 
-    @GET("/users/{email}")
-    public User findUser(@Path("email") String email);
-
-    @Headers("User-Agent: Retrofit-Sample-App")
     @GET("/users/{name}/repos")
     public void findAll(@Path("name") String name, Callback<List<User>> callback);
 

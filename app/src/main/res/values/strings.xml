@@ -11,4 +11,8 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
 
+    <!-- Git hub credentials -->
+    <string name="github_username">maxik.sp@gmail.com</string>
+    <string name="github_password">13051956m</string>
+
 </resources>
