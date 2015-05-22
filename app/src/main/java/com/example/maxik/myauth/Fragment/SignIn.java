@@ -1,19 +1,32 @@
 package com.example.maxik.myauth.Fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
-import com.example.maxik.myauth.Listener.OnSignInButtonClick;
+import com.example.maxik.myauth.Command.UserService;
+import com.example.maxik.myauth.Entity.User;
 import com.example.maxik.myauth.R;
-import com.example.maxik.myauth.Services.RestClientComponent;
-import com.example.maxik.myauth.Services.RestClientModule;
+import com.example.maxik.myauth.Services.DaggerRestClientComponent;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,15 +36,17 @@ import com.example.maxik.myauth.Services.RestClientModule;
  * Use the {@link SignIn#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignIn extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class SignIn extends Fragment implements Validator.ValidationListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    /**
+     * todo move all constraints to separate class that implement  ValidationListener interface
+     */
+    @NotEmpty
+    @Email
+    private EditText email;
+
+    @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC)
+    private EditText password;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,16 +54,12 @@ public class SignIn extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment SignIn.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignIn newInstance(String param1, String param2) {
+    public static SignIn newInstance() {
         SignIn fragment = new SignIn();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +71,6 @@ public class SignIn extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -71,7 +78,19 @@ public class SignIn extends Fragment {
         Button buttonSignIn = (Button) view.findViewById(R.id.sign_in);
         Button buttonSignUp = (Button) view.findViewById(R.id.sign_up);
 
-        buttonSignIn.setOnClickListener(new OnSignInButtonClick(this.getActivity()));
+        this.email = (EditText) view.findViewById(R.id.email);
+        this.password = (EditText) view.findViewById(R.id.password);
+
+        final Validator validator = new Validator(this);
+        validator.setValidationListener(this);
+
+        buttonSignIn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                validator.validate();
+            }
+        });
     }
 
     @Override
@@ -120,4 +139,38 @@ public class SignIn extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onValidationSucceeded() {
+        RestAdapter adapter = DaggerRestClientComponent.create().provideRestAdapter();
+
+        String username = this.getString(R.string.github_username);
+        String password = this.getString(R.string.github_password);
+
+        byte[] bytes = String.format("%s:%s", username, password).getBytes();
+        String encodedCredentials = String.format("Basic %s", Base64.encodeToString(bytes, Base64.URL_SAFE));
+
+        adapter.create(UserService.class).authenticate(encodedCredentials, new Callback<User>() {
+
+            @Override
+            public void success(User user, Response response) {
+                int a = 2;
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                int a = 2;
+            }
+        });
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+
+        for (ValidationError error: errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this.getActivity());
+
+            ((EditText) view).setError(message);
+        }
+    }
 }
