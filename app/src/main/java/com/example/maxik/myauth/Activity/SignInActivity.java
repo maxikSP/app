@@ -1,7 +1,5 @@
 package com.example.maxik.myauth.Activity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,29 +9,23 @@ import android.view.MenuItem;
 import com.example.maxik.myauth.Fragment.SignIn;
 import com.example.maxik.myauth.R;
 
-
-public class MainActivity extends AppCompatActivity implements SignIn.OnFragmentInteractionListener {
-
-    /**
-     * Create new main activity intent.
-     * @param context
-     * @return
-     */
-    public static final Intent newIntent(Context context) {
-        return new Intent(context, MainActivity.class);
-    }
+public class SignInActivity extends AppCompatActivity implements SignIn.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+        setContentView(R.layout.activity_sign_in);
 
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.sign_in_activity, SignIn.newInstance())
+                .commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_sign_in, menu);
         return true;
     }
 

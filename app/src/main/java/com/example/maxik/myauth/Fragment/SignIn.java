@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.maxik.myauth.Activity.MainActivity;
 import com.example.maxik.myauth.Command.UserService;
 import com.example.maxik.myauth.Entity.User;
 import com.example.maxik.myauth.R;
@@ -91,6 +92,14 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
                 validator.validate();
             }
         });
+
+        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -98,13 +107,6 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_in, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -143,17 +145,14 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
     public void onValidationSucceeded() {
         RestAdapter adapter = DaggerRestClientComponent.create().provideRestAdapter();
 
-        String username = this.getString(R.string.github_username);
-        String password = this.getString(R.string.github_password);
-
-        byte[] bytes = String.format("%s:%s", username, password).getBytes();
+        byte[] bytes = String.format("%s:%s", email, password).getBytes();
         String encodedCredentials = String.format("Basic %s", Base64.encodeToString(bytes, Base64.URL_SAFE));
 
         adapter.create(UserService.class).authenticate(encodedCredentials, new Callback<User>() {
 
             @Override
             public void success(User user, Response response) {
-                int a = 2;
+                startActivity(MainActivity.newIntent(getActivity()));
             }
 
             @Override
