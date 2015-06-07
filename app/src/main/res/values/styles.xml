@@ -1,16 +1,31 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:colorBackground">@android:color/holo_blue_light</item>
+    <style name="AppTheme" >
+        <item name="android:textColor">@color/github_txt_color</item>
+        <item name="android:textColorHint">@color/github_txt_hint_color</item>
     </style>
 
-    <style name="SignIn" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:colorBackground">@android:color/darker_gray</item>
+    <style name="SignIn">
         <item name="android:padding">10dp</item>
+        <item name="android:background">@color/github_bg_color</item>
     </style>
 
-    <style name="SignInEmail">
-        <item name="android:colorBackground">@android:color/white</item>
+    <style name="SignIn.TextFields">
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/github_txt_color</item>
     </style>
+
+    <style name="SignIn.Buttons">
+        <item name="android:textColor">@color/github_button_txt_color</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="SignIn.ItemRepo">
+        <item name="android:textColor">@color/github_txt_color</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

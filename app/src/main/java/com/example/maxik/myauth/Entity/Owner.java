@@ -3,6 +3,7 @@ package com.example.maxik.myauth.Entity;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 /**
  * Created by maxik on 5/20/15.
@@ -11,24 +12,31 @@ import org.parceler.Parcel;
 @Parcel
 public class Owner {
 
+    @Transient
     @SerializedName("id")
     private int id;
 
+    @Transient
     @SerializedName("login")
     private String login;
 
+    @Transient
     @SerializedName("avatar_url")
     private String avatarUrl;
 
+    @Transient
     @SerializedName("gravatar_id")
     private String gravatarId;
 
+    @Transient
     @SerializedName("url")
     private String url;
 
+    @Transient
     @SerializedName("html_url")
     private String htmlUrl;
 
+    @Transient
     @SerializedName("followers_url")
     private String followersUrl;
 

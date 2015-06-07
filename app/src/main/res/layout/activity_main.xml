@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:id="@+id/main"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    style="@style/SignIn"
+    android:baselineAligned="false">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        style="?android:listViewStyle"/>
 </LinearLayout>

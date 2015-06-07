@@ -1,21 +1,27 @@
 package com.example.maxik.myauth.Fragment;
 
-import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.example.maxik.myauth.Activity.MainActivity;
 import com.example.maxik.myauth.Command.UserService;
+import com.example.maxik.myauth.Entity.Repo;
 import com.example.maxik.myauth.Entity.User;
 import com.example.maxik.myauth.R;
 import com.example.maxik.myauth.Services.DaggerRestClientComponent;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -29,45 +35,15 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SignIn.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SignIn#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SignIn extends Fragment implements Validator.ValidationListener {
 
-    /**
-     * todo move all constraints to separate class that implement  ValidationListener interface
-     */
     @NotEmpty
     @Email
     private EditText email;
 
     @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC)
     private EditText password;
-
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SignIn.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignIn newInstance() {
-        SignIn fragment = new SignIn();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public SignIn() {
-        // Required empty public constructor
-    }
+    private FrameLayout progress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +55,9 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
         Button buttonSignIn = (Button) view.findViewById(R.id.sign_in);
         Button buttonSignUp = (Button) view.findViewById(R.id.sign_up);
 
-        this.email = (EditText) view.findViewById(R.id.email);
-        this.password = (EditText) view.findViewById(R.id.password);
+        email = (EditText) view.findViewById(R.id.email);
+        password = (EditText) view.findViewById(R.id.password);
+        progress = (FrameLayout) getActivity().findViewById(R.id.progress_bar);
 
         final Validator validator = new Validator(this);
         validator.setValidationListener(this);
@@ -110,54 +87,42 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
     public void onValidationSucceeded() {
-        RestAdapter adapter = DaggerRestClientComponent.create().provideRestAdapter();
+        final RestAdapter adapter = DaggerRestClientComponent.create().provideRestAdapter();
 
-        byte[] bytes = String.format("%s:%s", email, password).getBytes();
+        EditText email = (EditText) getView().findViewById(R.id.email);
+        EditText password = (EditText) getView().findViewById(R.id.password);
+
+        byte[] bytes = String.format("%s:%s", email.getText(), password.getText()).getBytes();
         String encodedCredentials = String.format("Basic %s", Base64.encodeToString(bytes, Base64.URL_SAFE));
+
+        progress.setVisibility(getView().VISIBLE);
 
         adapter.create(UserService.class).authenticate(encodedCredentials, new Callback<User>() {
 
             @Override
             public void success(User user, Response response) {
+
+                SharedPreferences.Editor preferences = SignIn.this.getActivity()
+                        .getSharedPreferences(User.USER_PREFERENCES, Context.MODE_PRIVATE)
+                        .edit();
+
+                preferences.putString(User.USER_PREFERENCES, new GsonBuilder().create().toJson(user));
+                preferences.commit();
+
                 startActivity(MainActivity.newIntent(getActivity()));
             }
 
             @Override
             public void failure(RetrofitError error) {
-                int a = 2;
+
+                progress.setVisibility(View.GONE);
+                DialogFragment dialog = GithubDialog.newInstance(
+                        getResources().getString(R.string.validation_fail_title),
+                        getResources().getString(R.string.validation_fail_message)
+                );
+
+                dialog.show(getFragmentManager(), "sign_in_validation_error");
             }
         });
     }
@@ -165,11 +130,17 @@ public class SignIn extends Fragment implements Validator.ValidationListener {
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
 
-        for (ValidationError error: errors) {
-            View view = error.getView();
-            String message = error.getCollatedErrorMessage(this.getActivity());
+        progress.setVisibility(View.GONE);
 
-            ((EditText) view).setError(message);
-        }
+        DialogFragment dialog = GithubDialog.newInstance(
+                "Validation falure",
+                errors.get(0).getCollatedErrorMessage(getActivity())
+        );
+
+        dialog.show(getFragmentManager(), "sign_in_validation_error");
+
     }
+
+
+
 }

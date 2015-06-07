@@ -1,15 +1,15 @@
 package com.example.maxik.myauth.Activity;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.maxik.myauth.Fragment.SignIn;
 import com.example.maxik.myauth.R;
 
-public class SignInActivity extends AppCompatActivity implements SignIn.OnFragmentInteractionListener {
+public class SignInActivity extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,34 +18,8 @@ public class SignInActivity extends AppCompatActivity implements SignIn.OnFragme
 
         getFragmentManager()
                 .beginTransaction()
-                .add(R.id.sign_in_activity, SignIn.newInstance())
+                .add(R.id.sign_in_activity, new SignIn())
                 .commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sign_in, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

@@ -2,10 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.maxik.myauth.Activity.SignInActivity"
-    android:orientation="horizontal"
-    android:id="@+id/sign_in_activity">
+    tools:context="com.example.maxik.myauth.Fragment.GithubDialog"
+    android:orientation="horizontal">
 
-    <include layout="@layout/rogress_bar"/>
+
 
 </LinearLayout>

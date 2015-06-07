@@ -1,0 +1,11 @@
+<resources>
+    <color name="github_bg_color">#FFFFFF</color>
+    <color name="github_txt_color">#333333</color>
+    <color name="github_txt_hint_color">#B1C1CE</color>
+    <color name="github_button_bg_color_start">#fcfcfc</color>
+    <color name="github_button_bg_color_end">#eeeeee</color>
+    <color name="github_button_border_color">#d5d5d5</color>
+    <color name="github_button_txt_color">#333333</color>
+    <color name="github_border_focused_color">#4C9FDF</color>
+    <color name="github_bg_focused">#F1F1F1</color>
+</resources>

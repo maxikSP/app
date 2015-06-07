@@ -2,17 +2,29 @@ package com.example.maxik.myauth.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-import com.example.maxik.myauth.Fragment.SignIn;
+import com.example.maxik.myauth.Command.UserService;
+import com.example.maxik.myauth.Entity.Repo;
+import com.example.maxik.myauth.Entity.User;
+import com.example.maxik.myauth.ListAdapter.RepoAdapter;
 import com.example.maxik.myauth.R;
 
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SignIn.OnFragmentInteractionListener {
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+
+public class MainActivity extends SignInAbstractActivity {
+
+    private User user;
+    private RestAdapter adapter;
 
     /**
      * Create new main activity intent.
@@ -27,8 +39,30 @@ public class MainActivity extends AppCompatActivity implements SignIn.OnFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        user = getUser();
+        adapter = getRestAdapter();
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        final ListView listView = (ListView) findViewById(R.id.listView);
+
+        adapter.create(UserService.class).findMyRepos(user.getLogin(), new Callback<List<Repo>>() {
+            @Override
+            public void success(List<Repo> repos, Response response) {
+                RepoAdapter adapter = new RepoAdapter(MainActivity.this, repos);
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,10 +84,5 @@ public class MainActivity extends AppCompatActivity implements SignIn.OnFragment
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

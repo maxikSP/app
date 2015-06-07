@@ -3,8 +3,7 @@ package com.example.maxik.myauth.Entity;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
-
-import java.util.List;
+import org.parceler.Transient;
 
 /**
  * Created by maxik on 5/19/15.
@@ -13,56 +12,97 @@ import java.util.List;
 @Parcel
 public class User {
 
+    public final static String USER_PREFERENCES = "user";
+
+    @Transient
     @SerializedName("id")
     private int id;
 
-    @SerializedName("name")
-    private String name;
+    @Transient
+    @SerializedName("login")
+    private String login;
 
-    @SerializedName("owner")
-    private Owner owner;
+    @SerializedName("avatar_url")
+    private String avatarUrl;
 
-    @SerializedName("phone")
-    private String phone;
-
-    @SerializedName("private")
-    private boolean isPrivate;
-
-    @SerializedName("html_url")
-    private String htmlUrl;
-
-    @SerializedName("description")
-    private String description;
-
-    @SerializedName("fork")
-    private boolean fork;
+    @SerializedName("gravatar_id")
+    private String gravatarId;
 
     @SerializedName("url")
     private String url;
 
-    @SerializedName("forks_url")
-    private String forksUrl;
+    @Transient
+    @SerializedName("html_url")
+    private String htmlUrl;
 
-    @SerializedName("keys_url")
-    private String keysUrl;
+    @SerializedName("followers_url")
+    private String followersUrl;
 
-    @SerializedName("collaborators_url")
-    private String collaboratorsUrl;
+    @SerializedName("following_url")
+    private String followingUrl;
 
-    @SerializedName("teams_url")
-    private String teamsUrl;
+    @SerializedName("gists_url")
+    private String gistsUrl;
 
-    @SerializedName("hooks_url")
-    private String hooksUrl;
+    @SerializedName("starred_url")
+    private String starredUrl;
 
-    @SerializedName("issue_events_url")
-    private String issueEventsUrl;
+    @SerializedName("subscriptions_url")
+    private String subscriptionsUrl;
+
+    @SerializedName("organizations_url")
+    private String organizationsUrl;
+
+    @SerializedName("repos_url")
+    private String reposUrl;
 
     @SerializedName("events_url")
     private String eventsUrl;
 
-    @SerializedName("assignees_url")
-    private String assigneesUrl;
+    @SerializedName("received_events_url")
+    private String receivedEventsUrl;
+
+    @SerializedName("type")
+    private String type;
+
+    @SerializedName("site_admin")
+    private Boolean siteAdmin;
+
+    @SerializedName("public_repos")
+    private int publicRepos;
+
+    @SerializedName("public_gists")
+    private int publicGists;
+
+    @SerializedName("followers")
+    private int followers;
+
+    @SerializedName("following")
+    private int following;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
+
+    @SerializedName("private_gists")
+    private int privateGists;
+
+    @SerializedName("total_private_repos")
+    private int totalPrivateRepos;
+
+    @SerializedName("owned_private_repos")
+    private int ownedPrivateRepos;
+
+    @SerializedName("disk_usage")
+    private int diskUsage;
+
+    @SerializedName("collaborators")
+    private int collaborators;
+
+    @SerializedName("plan")
+    private Plan plan;
 
     public int getId() {
         return id;
@@ -72,60 +112,28 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getGravatarId() {
+        return gravatarId;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public boolean isPrivate() {
-        return isPrivate;
-    }
-
-    public void setPrivate(boolean isPrivate) {
-        this.isPrivate = isPrivate;
-    }
-
-    public String getHtmlUrl() {
-        return htmlUrl;
-    }
-
-    public void setHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isFork() {
-        return fork;
-    }
-
-    public void setFork(boolean fork) {
-        this.fork = fork;
+    public void setGravatarId(String gravatarId) {
+        this.gravatarId = gravatarId;
     }
 
     public String getUrl() {
@@ -136,52 +144,68 @@ public class User {
         this.url = url;
     }
 
-    public String getForksUrl() {
-        return forksUrl;
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
-    public void setForksUrl(String forksUrl) {
-        this.forksUrl = forksUrl;
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
     }
 
-    public String getKeysUrl() {
-        return keysUrl;
+    public String getFollowersUrl() {
+        return followersUrl;
     }
 
-    public void setKeysUrl(String keysUrl) {
-        this.keysUrl = keysUrl;
+    public void setFollowersUrl(String followersUrl) {
+        this.followersUrl = followersUrl;
     }
 
-    public String getCollaboratorsUrl() {
-        return collaboratorsUrl;
+    public String getFollowingUrl() {
+        return followingUrl;
     }
 
-    public void setCollaboratorsUrl(String collaboratorsUrl) {
-        this.collaboratorsUrl = collaboratorsUrl;
+    public void setFollowingUrl(String followingUrl) {
+        this.followingUrl = followingUrl;
     }
 
-    public String getTeamsUrl() {
-        return teamsUrl;
+    public String getGistsUrl() {
+        return gistsUrl;
     }
 
-    public void setTeamsUrl(String teamsUrl) {
-        this.teamsUrl = teamsUrl;
+    public void setGistsUrl(String gistsUrl) {
+        this.gistsUrl = gistsUrl;
     }
 
-    public String getHooksUrl() {
-        return hooksUrl;
+    public String getStarredUrl() {
+        return starredUrl;
     }
 
-    public void setHooksUrl(String hooksUrl) {
-        this.hooksUrl = hooksUrl;
+    public void setStarredUrl(String starredUrl) {
+        this.starredUrl = starredUrl;
     }
 
-    public String getIssueEventsUrl() {
-        return issueEventsUrl;
+    public String getSubscriptionsUrl() {
+        return subscriptionsUrl;
     }
 
-    public void setIssueEventsUrl(String issueEventsUrl) {
-        this.issueEventsUrl = issueEventsUrl;
+    public void setSubscriptionsUrl(String subscriptionsUrl) {
+        this.subscriptionsUrl = subscriptionsUrl;
+    }
+
+    public String getOrganizationsUrl() {
+        return organizationsUrl;
+    }
+
+    public void setOrganizationsUrl(String organizationsUrl) {
+        this.organizationsUrl = organizationsUrl;
+    }
+
+    public String getReposUrl() {
+        return reposUrl;
+    }
+
+    public void setReposUrl(String reposUrl) {
+        this.reposUrl = reposUrl;
     }
 
     public String getEventsUrl() {
@@ -192,11 +216,123 @@ public class User {
         this.eventsUrl = eventsUrl;
     }
 
-    public String getAssigneesUrl() {
-        return assigneesUrl;
+    public String getReceivedEventsUrl() {
+        return receivedEventsUrl;
     }
 
-    public void setAssigneesUrl(String assigneesUrl) {
-        this.assigneesUrl = assigneesUrl;
+    public void setReceivedEventsUrl(String receivedEventsUrl) {
+        this.receivedEventsUrl = receivedEventsUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getSiteAdmin() {
+        return siteAdmin;
+    }
+
+    public void setSiteAdmin(Boolean siteAdmin) {
+        this.siteAdmin = siteAdmin;
+    }
+
+    public int getPublicRepos() {
+        return publicRepos;
+    }
+
+    public void setPublicRepos(int publicRepos) {
+        this.publicRepos = publicRepos;
+    }
+
+    public int getPublicGists() {
+        return publicGists;
+    }
+
+    public void setPublicGists(int publicGists) {
+        this.publicGists = publicGists;
+    }
+
+    public int getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getPrivateGists() {
+        return privateGists;
+    }
+
+    public void setPrivateGists(int privateGists) {
+        this.privateGists = privateGists;
+    }
+
+    public int getTotalPrivateRepos() {
+        return totalPrivateRepos;
+    }
+
+    public void setTotalPrivateRepos(int totalPrivateRepos) {
+        this.totalPrivateRepos = totalPrivateRepos;
+    }
+
+    public int getOwnedPrivateRepos() {
+        return ownedPrivateRepos;
+    }
+
+    public void setOwnedPrivateRepos(int ownedPrivateRepos) {
+        this.ownedPrivateRepos = ownedPrivateRepos;
+    }
+
+    public int getDiskUsage() {
+        return diskUsage;
+    }
+
+    public void setDiskUsage(int diskUsage) {
+        this.diskUsage = diskUsage;
+    }
+
+    public int getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(int collaborators) {
+        this.collaborators = collaborators;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
     }
 }
